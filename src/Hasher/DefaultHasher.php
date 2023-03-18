@@ -17,8 +17,14 @@ class DefaultHasher implements RequestHasher
     {
         $cacheNameSuffix = $this->getCacheNameSuffix($request);
 
-        return 'responsecache-' . md5(
+        /*return 'responsecache-' . md5(
             "{$request->getHost()}-{$this->getNormalizedRequestUri($request)}-{$request->getMethod()}/$cacheNameSuffix"
+        );*/
+        
+        $locale = $request->header('X-Locale') ?? Session::get('locale');
+
+        return 'responsecache-' . md5(
+            "{$request->getHost()}-{$this->getNormalizedRequestUri($request)}-{$locale}-{$request->getMethod()}/$cacheNameSuffix"
         );
     }
 
